@@ -8,5 +8,4 @@ setup(name='bluzelleHackathon',
       author_email='weininghu1012@gmail.com',
       license='MIT',
       packages=['bluzelleHackathon'],
-      install_requires=['websocket>=0.47.0'],
       zip_safe=False)
