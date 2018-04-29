@@ -1,5 +1,6 @@
 from websocket import create_connection
 import json
+import time
 
 
 # example form:
@@ -67,6 +68,7 @@ class Bluzelle:
         self.c.send(json.dumps(data))  # dict object to json string
         ret = self.c.recv()
         ret = eval(ret)  # json string to object
+        # add polling part to check if value is changed within timeout
 
         print(ret)
         # print(ret['error'])  # get error code
@@ -117,6 +119,23 @@ class Bluzelle:
 
     def keys(self):
         pass
+
+    def poll(self, operation, key, value):
+        pollRate = 200; //ms
+        pollTimeout = 2000;
+        sleepTime = 2
+        current_milli_time = lambda: int(round(time.time() * 1000))
+
+
+        startTime = current_milli_time()
+        while (current_milli_time() - startTime < pollTimeout):
+            if (operation(key) == value):
+                return 
+            time.sleep(sleepTime)
+            sleepTime = sleepTime*2
+        raise TimeoutError("Time out for this operation")
+
+
 
 
 b = Bluzelle()
