@@ -1,8 +1,4 @@
+from pyBluzelle.main import Bluzelle
 
-
-
-
-
-def joke():
-    return (u'Wenn ist das Nunst\u00fcck git und Slotermeyer? Ja! ... '
-            u'Beiherhund das Oder die Flipperwaldt gersput.')
+def create_connection(host, port, uuid):
+    return Bluzelle(host, port, uuid)

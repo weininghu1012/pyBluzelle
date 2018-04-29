@@ -19,11 +19,7 @@ data = {
 
 class Bluzelle:
 
-    def __init__(self):
-        self.ip = None
-        self.uuid = ""
-
-    def connect(self, host, port, uuid):
+    def __init__(self, host, port, uuid):
         self.host = host
         self.ip = 'ws://' + host + ':' + str(port)
         self.uuid = uuid
