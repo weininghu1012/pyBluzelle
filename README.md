@@ -31,4 +31,4 @@ run `python3 test/test_create.py` in the `pyBluzelle` directory
 
 
 ## Javascript API reference
-[websocketAPI]("127.0.0.1", 51011, "137a8403-52ec-43b7-8083-91391d4c5e67)
+[websocketAPI](https://bluzelle.github.io/api/#js-api)
