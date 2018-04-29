@@ -22,97 +22,48 @@ data = {
 class Bluzelle:
 
     def __init__(self):
-
-        self.c = None
+        self.ip = None
         self.uuid = ""
 
-        pass
-
     def connect(self,ip,uuid):
-        self.c = create_connection(ip)
+        self.ip = ip
         self.uuid = uuid
-        pass
+        self.payload = {
+            "bzn-api": "crud",
+            "cmd": None,
+            "data": {},
+            "db-uuid": self.uuid,
+            "request-id": 0
+        }
 
     def create(self,key,value):
-        data = {
-            "bzn-api": "crud",
-            "cmd": "create",
-            "data": {
-                "key": key,
-                "value": value
-            },
-            "db-uuid": self.uuid,
-            "request-id": 33
-        }
+        req = self.payload
+        req["cmd"] = "create"
+        req["data"]["key"] = key
+        req["data"]["value"] = value
+        return self.__sendRequest(req)
 
-        self.c.send(json.dumps(data))  # dict object to json string
-        ret = self.c.recv()
-        ret = eval(ret)  # json string to object
-
-        print(ret)
-        # print(ret['error'])  # get error code
-        pass
 
     def update(self,key,value):
-        data = {
-            "bzn-api": "crud",
-            "cmd": "update",
-            "data": {
-                "key": key,
-                "value": value
-            },
-            "db-uuid": self.uuid,
-            "request-id": 33
-        }
+        req = self.payload
+        req["cmd"] = "update"
+        req["data"]["key"] = key
+        req["data"]["value"] = value
+        return self.__sendRequest(req)
 
-        self.c.send(json.dumps(data))  # dict object to json string
-        ret = self.c.recv()
-        ret = eval(ret)  # json string to object
-        # add polling part to check if value is changed within timeout
-
-        print(ret)
-        # print(ret['error'])  # get error code
-
-        pass
 
     def read(self,key):
-        data = {
-            "bzn-api": "crud",
-            "cmd": "read",
-            "data": {
-                "key": key,
-            },
-            "db-uuid": self.uuid,
-            "request-id": 33
-        }
-
-        self.c.send(json.dumps(data))  # dict object to json string
-        ret = self.c.recv()
-        ret = eval(ret)  # json string to object
-
-        print(ret)
-        # print(ret['error'])  # get error code
-
-        pass
+        req = self.payload
+        req["cmd"] = "read"
+        req["data"]["key"] = key
+        return self.__sendRequest(req)
 
     def delete(self, key):
-        data = {
-            "bzn-api": "crud",
-            "cmd": "delete",
-            "data": {
-                "key": key,
-            },
-            "db-uuid": self.uuid,
-            "request-id": 33
-        }
+        req = self.payload
+        req["cmd"] = "delete"
+        req["data"]["key"] = key
+        return self.__sendRequest(req)
 
-        self.c.send(json.dumps(data))  # dict object to json string
-        ret = self.c.recv()
-        ret = eval(ret)  # json string to object
-
-        print(ret)
-        # print(ret['error'])  # get error code
-        pass
 
     def has(self, key):
         pass
@@ -121,8 +72,8 @@ class Bluzelle:
         pass
 
     def poll(self, operation, key, value):
-        pollRate = 200; //ms
-        pollTimeout = 2000;
+        pollRate = 200
+        pollTimeout = 2000
         sleepTime = 2
         current_milli_time = lambda: int(round(time.time() * 1000))
 
@@ -135,12 +86,10 @@ class Bluzelle:
             sleepTime = sleepTime*2
         raise TimeoutError("Time out for this operation")
 
-
-
-
-b = Bluzelle()
-b.connect("ws://127.0.0.1:51012","137a8403-52ec-43b7-8083-91391d4c5e67")
-# b.create("gg","1234")
-# b.update("gg","4321")
-# b.read("gg")
-# b.delete("gg")
+    def __sendRequest(self, data):
+        c = create_connection(self.ip)
+        c.send(json.dumps(data))
+        ret = c.recv()
+        c.close()
+        print(ret)
+        return ret
