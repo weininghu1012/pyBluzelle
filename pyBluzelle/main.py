@@ -44,7 +44,7 @@ class Bluzelle:
         req["data"]["value"] = value
         # test if the workder nodes all get updated
         self.__sendRequest(req)
-        self.poll(self.read, key, value)
+        self.__poll(self.read, key, value)
         
 
 
@@ -57,7 +57,8 @@ class Bluzelle:
         req["cmd"] = "update"
         req["data"]["key"] = key
         req["data"]["value"] = value
-        return self.__sendRequest(req)
+        self.__sendRequest(req)
+        self.__poll(self.read, key, value)
 
 
     def read(self,key):
@@ -79,7 +80,7 @@ class Bluzelle:
     def keys(self):
         pass
 
-    def poll(self, operation, key, value):
+    def __poll(self, operation, key, value):
         pollRate = 200
         pollTimeout = 2000
         sleepTime = 0.1
@@ -90,7 +91,7 @@ class Bluzelle:
         while (current_milli_time() - startTime < pollTimeout):
             updatedObject = operation(key)
             updatedObjectDic = json.loads(updatedObject)
-            print(updatedObjectDic["data"]["value"])
+            print(updatedObjectDic.keys())
             if (updatedObjectDic["data"]["value"] == value):
                 return 
             time.sleep(sleepTime)
