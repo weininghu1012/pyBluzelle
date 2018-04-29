@@ -25,8 +25,9 @@ class Bluzelle:
         self.ip = None
         self.uuid = ""
 
-    def connect(self,ip,uuid):
-        self.ip = ip
+    def connect(self, host, port, uuid):
+        self.host = host
+        self.ip = 'ws://' + host + ':' + str(port)
         self.uuid = uuid
         self.payload = {
             "bzn-api": "crud",
@@ -101,5 +102,11 @@ class Bluzelle:
         c.send(json.dumps(data))
         ret = c.recv()
         c.close()
-        print(ret)
+        d = eval(ret)
+        if 'error' in d and d['error'] == 'NOT_THE_LEADER':
+            self.ip = 'ws://' + self.host + ':' + str(d['data']['leader-port'])
+            self.__sendRequest(data)
+        print(d)
         return ret
+
+
