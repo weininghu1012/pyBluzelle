@@ -42,8 +42,8 @@ class Bluzelle:
         req["data"]["value"] = value
         # test if the workder nodes all get updated
         ret = self.__sendRequest(req)
-        self.__poll(lambda : self.read(key) == value, key)
-        return ret
+        self.__poll(lambda : self.read(key) == value)
+        return 'error' not in ret
 
 
     def update(self, key, value):
@@ -52,8 +52,8 @@ class Bluzelle:
         req["data"]["key"] = key
         req["data"]["value"] = value
         ret = self.__sendRequest(req)
-        self.__poll(lambda : self.read(key) == value, key)
-        return ret
+        self.__poll(lambda : self.read(key) == value)
+        return 'error' not in ret
 
 
     def read(self, key):
@@ -70,21 +70,21 @@ class Bluzelle:
         req["cmd"] = "delete"
         req["data"]["key"] = key
         ret = self.__sendRequest(req)
-        self.__poll(lambda : self.read(key) == None, key)
-        return ret
+        self.__poll(lambda : self.read(key) == None)
+        return 'error' not in ret
 
     def has(self, key):
         req = self.payload
-        req["cmd"] = "read"
+        req["cmd"] = "has"
         req["data"]["key"] = key
-        return self.__sendRequest(req)
+        return self.__sendRequest(req)['data']['key-exists']
 
     def keys(self):
         req = self.payload
         req["cmd"] = "keys"
-        return self.__sendRequest(req)
+        return self.__sendRequest(req)['data']['keys']
 
-    def __poll(self, operation, key):
+    def __poll(self, operation):
         pollRate = 200
         pollTimeout = 2000
         sleepTime = 0.1
@@ -103,7 +103,7 @@ class Bluzelle:
         c.send(json.dumps(data))
         ret = c.recv()
         c.close()
-        d = eval(ret)
+        d = json.loads(ret)
         if 'error' in d and d['error'] == 'NOT_THE_LEADER':
             self.ip = 'ws://' + self.host + ':' + str(d['data']['leader-port'])
             d = self.__sendRequest(data)
