@@ -17,8 +17,6 @@ data = {
 }
 """
 
-
-
 class Bluzelle:
 
     def __init__(self):
@@ -45,12 +43,6 @@ class Bluzelle:
         # test if the workder nodes all get updated
         self.__sendRequest(req)
         self.poll(self.read, key, value)
-        
-
-
-
-
-
 
     def update(self,key,value):
         req = self.payload
@@ -84,7 +76,6 @@ class Bluzelle:
         pollTimeout = 2000
         sleepTime = 0.1
         current_milli_time = lambda: int(round(time.time() * 1000))
-
 
         startTime = current_milli_time()
         while (current_milli_time() - startTime < pollTimeout):
