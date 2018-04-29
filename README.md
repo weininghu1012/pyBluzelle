@@ -2,7 +2,7 @@
 
 ## About pyBluzelle
 
-pyBluzelle is a python client for developing Python applications that can connect to Bluzelle SwarmDB and perform all standard operations.
+pyBluzelle is a python client for developing Python applications that can connect to Bluzelle SwarmDB and performs all standard CRUD operations.
 
 ## Getting Started
 
@@ -14,10 +14,21 @@ pyBluzelle is a python client for developing Python applications that can connec
 
 4. Run `pip3 setup.py install` under the `pyBluzelle` directory
 
-```
+## Create a connection
 
-```
+1. Run `python3` in your terminal
+
+2. Run `import pyBluzelle`
+
+3. Run `my_connection = pyBluzelle.create_connection(localhostIP, port, UUID)`
+
+4. Ready for test
+
 
 ## Testing Locally
 
 run `python3 test/test_create.py` in the `pyBluzelle` directory
+
+
+## Javascript API reference
+[websocketAPI]("127.0.0.1", 51011, "137a8403-52ec-43b7-8083-91391d4c5e67)
