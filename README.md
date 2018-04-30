@@ -2,7 +2,7 @@
 
 ## About pyBluzelle
 
-pyBluzelle is a python client for developing Python applications that can connect to Bluzelle SwarmDB and performs all standard CRUD operations. It is built on top of [Websocket-Api](https://bluzelle.github.io/api/#websocket-api)
+pyBluzelle is a python client for developing Python applications that can connect to Bluzelle SwarmDB and performs all standard CRUD operations. It is built on top of [WebSocket API](https://bluzelle.github.io/api/#websocket-api)
 
 ## Getting Started
 
