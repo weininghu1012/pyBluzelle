@@ -12,7 +12,7 @@ pyBluzelle is a python client for developing Python applications that can connec
 
 3. Get our client code (https://github.com/weininghu1012/pyBluzelle)
 
-4. Run `pip3 setup.py install` under the `pyBluzelle` directory
+4. Run `python3 setup.py install` under the `pyBluzelle` directory
 
 ### Run in Interpreter
 
