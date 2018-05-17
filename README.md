@@ -1,5 +1,7 @@
 # pyBluzelle
 
+[![Build Status](https://travis-ci.org/weininghu1012/pyBluzelle.png?branch=master)](https://travis-ci.org/weininghu1012/pyBluzelle)
+
 ## About pyBluzelle
 
 pyBluzelle is a python client for developing Python applications that can connect to Bluzelle SwarmDB and performs all standard CRUD operations. It is built on top of [WebSocket API](https://bluzelle.github.io/api/#websocket-api).
@@ -9,6 +11,8 @@ pyBluzelle is a python client for developing Python applications that can connec
 1. Install [Python 3.6](https://www.python.org/downloads/release/python-360/)
 
 2. Follow the instruction of deploying SwarmDB on Docker: https://github.com/bluzelle/swarmDB
+
+
 
 3. Get our client code (https://github.com/weininghu1012/pyBluzelle)
 
