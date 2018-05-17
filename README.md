@@ -14,7 +14,7 @@ pyBluzelle is a python client for developing Python applications that can connec
 
 4. Run `python3 setup.py install` under the `pyBluzelle` directory
 
-### Run in Interpreter
+## Run in Interpreter
 
 1. Run `python3` in your terminal
 
