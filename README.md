@@ -1,5 +1,8 @@
 # pyBluzelle
-
+[![Build Status](https://travis-ci.org/bluzelle/pyBluzelle.svg?branch=master)](https://travis-ci.org/bluzelle/swarmDB)
+[![License](https://img.shields.io/:license-Apache2.0-blue.svg?style=flat-square)](https://github.com/bluzelle/swarmDB/blob/devel/LICENSE)
+[![Twitter](https://img.shields.io/badge/twitter-@bluzelle-blue.svg?style=flat-square)](https://twitter.com/BluzelleHQ)
+[![Gitter chat](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/bluzelle)
 
 ## About pyBluzelle
 
