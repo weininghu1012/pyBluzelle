@@ -19,4 +19,5 @@ setup(name='pyBluzelle',
                         'protobuf>=3.6.0',
                         'mockito',
                         'pytest'],
+      scripts=['scripts/crud'],
       zip_safe=False)

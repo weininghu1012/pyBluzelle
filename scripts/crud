@@ -1,0 +1,182 @@
+#!/usr/bin/env python2.7
+
+# Copyright (C) 2018 Bluzelle
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License, version 3,
+# as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+# To generate Python bindings:
+#
+# cd proto
+# protoc --python_out=../scripts ./bluzelle.proto ./database.proto
+#
+
+import websocket
+import json
+import logging
+import sys
+
+from pyBluzelle import create_connection
+from argparse import ArgumentParser
+from argparse import RawDescriptionHelpFormatter
+
+
+def send_ping_request(node):
+    ws = websocket.create_connection("ws://" + node)
+
+    req = {}
+    req["bzn-api"] = "ping"
+
+    print("Sending : {}".format(req))
+    print("-" * 60 + '\n')
+
+    ws.send(json.dumps(req))
+    resp = ws.recv()
+
+    print("Response: \n{}".format(resp))
+    print("-" * 60 + '\n')
+
+    ws.close()
+
+    return resp
+
+
+def ping_handler(args):
+    return send_ping_request(args.node)
+
+
+def create_handler(args):
+    return create_connection(args.host, args.port, args.uuid).create(args.key, args.value)
+
+
+def update_handler(args):
+    return create_connection(args.host, args.port, args.uuid.update(args.key, args.value))
+
+
+def read_handler(args):
+    return create_connection(args.host, args.port, args.uuid).read(args.key)
+
+
+def delete_handler(args):
+    return create_connection(args.host, args.port, args.uuid).delete(args.key)
+
+
+def has_handler(args):
+    return create_connection(args.host, args.port, args.uuid).has(args.key)
+
+
+def keys_handler(args):
+    return create_connection(args.host, args.port, args.uuid).keys()
+
+
+def size_handler(args):
+    return create_connection(args.host, args.port, args.uuid).size()
+
+
+if __name__ == "__main__":
+
+    parser = ArgumentParser(description="crud", formatter_class=RawDescriptionHelpFormatter)
+
+    parser.add_argument("--debug", type=bool, default=False, help="enable debug logging")
+
+    required = parser.add_argument_group('required arguments')
+
+    required.add_argument("-o", "--host", type=str, default=None, help="node's url (ex. testnet.bluzelle.com)", required=True)
+    required.add_argument("-p", "--port", type=str, default=None, help="node's port (ex. 51010)", required=True)
+
+    subparsers = parser.add_subparsers()
+
+    # Ping
+    ping_parser = subparsers.add_parser('ping', help="Ping")
+    ping_parser.set_defaults(func=ping_handler)
+
+    # Create
+    create_parser = subparsers.add_parser('create', help="Create k/v")
+    create_group = create_parser.add_argument_group('required arguments')
+    create_group.add_argument("-u", "--uuid",  type=str, default=None, help="uuid", required=True)
+    create_group.add_argument("-k", "--key",   type=str, default=None, help="key", required=True)
+    group = create_group.add_mutually_exclusive_group()
+    group.add_argument("-v", "--value", type=str, default="", help="value")
+    group.add_argument("-f", "--file",  type=str, default=None, help="file to upload")
+    create_parser.set_defaults(func=create_handler)
+
+    # Read
+    read_parser = subparsers.add_parser('read', help="Read k/v")
+    read_group = read_parser.add_argument_group('required arguments')
+    read_group.add_argument("-k", "--key",   type=str, default=None, help="key", required=True)
+    read_group.add_argument("-u", "--uuid",  type=str, default=None, help="uuid", required=True)
+    read_parser.add_argument("-s", "--save", type=str, default=None, help="save to file")
+    read_parser.set_defaults(func=read_handler)
+
+    # Update
+    update_parser = subparsers.add_parser('update', help="Update k/v")
+    update_group = update_parser.add_argument_group('required arguments')
+    update_group.add_argument("-k", "--key",   type=str, default=None, help="key", required=True)
+    update_group.add_argument("-u", "--uuid",  type=str, default=None, help="uuid", required=True)
+    update = update_group.add_mutually_exclusive_group()
+    update.add_argument("-v", "--value", type=str, default=None, help="value")
+    update.add_argument("-f", "--file",  type=str, default=None,  help="file to upload")
+    update_parser.set_defaults(func=update_handler)
+
+    # delete
+    delete_parser = subparsers.add_parser('delete', help="Delete k/v")
+    delete_group = delete_parser.add_argument_group('required arguments')
+    delete_group.add_argument("-k", "--key",   type=str, default=None, help="key", required=True)
+    delete_group.add_argument("-u", "--uuid",  type=str, default=None, help="uuid", required=True)
+    delete_parser.set_defaults(func=delete_handler)
+
+    # has
+    has_parser = subparsers.add_parser('has', help="Determine whether a key exists within a DB by UUID")
+    has_group = has_parser.add_argument_group('requred arguments')
+    has_group.add_argument("-k", "--key",   type=str, default=None, help="key", required=True)
+    has_group.add_argument("-u", "--uuid",  type=str, default=None, help="uuid", required=True)
+    has_parser.set_defaults(func=has_handler)
+
+    # keys
+    keys_parser = subparsers.add_parser('keys', help="Get all keys for a DB by UUID")
+    keys_parser.add_argument("-u", "--uuid",  type=str, default=None, help="uuid", required=True)
+    keys_parser.set_defaults(func=keys_handler)
+
+    # size
+    size_parser = subparsers.add_parser('size', help="Determine the size of the DB by UUID")
+    size_parser.add_argument("-u", "--uuid",  type=str, default=None, help="uuid", required=True)
+    size_parser.set_defaults(func=size_handler)
+
+    args = parser.parse_args()
+    if args.debug:
+        logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+
+    try:
+        if args.file:
+            # if user gave us a file we need to read it as our value
+            args.value = open(args.file).read()
+    except IOError as e:
+        print("failed to read value from file: {}".format(e.strerror))
+        exit(1)
+    except AttributeError:
+        # no input file specified. Value was passed via command line
+        pass
+
+    resp = args.func(args)
+
+    print(resp)
+
+    try:
+        # save to a file...
+        if args.save:
+            with open(args.save, "w") as outfile:
+                outfile.write(str(resp.resp.value))
+    except AttributeError:
+        # no output file specified. Result will be printed to console
+        pass
+
+    exit(0)

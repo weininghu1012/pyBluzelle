@@ -1,6 +1,5 @@
 # pyBluzelle
 
-[![Build Status](https://travis-ci.org/weininghu1012/pyBluzelle.png?branch=master)](https://travis-ci.org/weininghu1012/pyBluzelle)
 
 ## About pyBluzelle
 
@@ -8,17 +7,29 @@ pyBluzelle is a python client for developing Python applications that can connec
 
 ## Getting Started
 
-1. Install [Python 3.6](https://www.python.org/downloads/release/python-360/)
+1. Install [Python 2.7](https://www.python.org/download/releases/2.7/)
 
 2. Follow the instruction of deploying SwarmDB on Docker: https://github.com/bluzelle/swarmDB
 
 3. Get our client code (https://github.com/bluzelle/pyBluzelle)
 
-4. Run `python3 setup.py install` under the `pyBluzelle` directory
+4. Install the protobuf compiler
+
+Ubuntu 
+
+`apt-get install protobuf-compiler`
+
+OSX
+
+`brew install protobuf`
+
+5. Run  protoc --python_out=./pyBluzelle/proto --proto_path=proto/proto bluzelle.proto database.proto audit.proto in the `pyBluzelle` directory
+
+6. Run `pip install .` under the `pyBluzelle` directory
 
 ## Run in Interpreter
 
-1. Run `python3` in your terminal
+1. Run `python2.7` in your terminal
 
 2. Run `import pyBluzelle`
 
@@ -39,7 +50,7 @@ True
 
 ## Testing Locally
 
-run `python3 test/test_connection` in the `pyBluzelle` directory
+run `python2.7 test/test_connection` in the `pyBluzelle` directory
 
 ## List of API
 create an key value pair, return false if the key exists, return true if success.
@@ -66,6 +77,33 @@ return the list of the keys in the DB
 ```
 keys()
 ```
+
+##Python CRUD Test App
+
+Steps to run the Bluzelle SwarmDB test application in a Python Virtual Environment. **Ensure that you activate your virtualenv each time you want to run the application**.
+
+
+##Install Virtual Environment
+
+
+    $ sudo pip install virtualenv
+    $ cd workspace
+    $ virtualenv crud-app
+
+## Activate Virtual Environment
+    $ . ~/workspace/crud-app/bin/activate
+    
+## Install Dependencies
+
+    (crud-app)$ pip install .
+    (crud-app)$ pip install .
+
+### Generate Protobuf Code
+    (crud-app)$ cd ../workspace/swarmdb/scripts
+    (crud-app)$ protoc --python_out=../scripts ./bluzelle.proto ./database.proto
+    
+### Run Script
+    (crud-app)$ crud -h
 
 ## Javascript API reference
 [JsAPI](https://bluzelle.github.io/api/#js-api)
