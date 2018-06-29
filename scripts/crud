@@ -86,7 +86,7 @@ if __name__ == "__main__":
 
     parser = ArgumentParser(description="crud", formatter_class=RawDescriptionHelpFormatter)
 
-    parser.add_argument("--debug", type=bool, default=False, help="enable debug logging")
+    parser.add_argument("--debug", action='store_true', help="enable debug logging")
 
     required = parser.add_argument_group('required arguments')
 
