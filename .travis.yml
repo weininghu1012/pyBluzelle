@@ -2,7 +2,8 @@ language: python
 
 
 before_install:
-  - sudo apt-get install -y ptotobuf-dev
+  - sudo apt-get install -y protobuf-dev
+  - protoc --python_out=./pyBluzelle/proto --proto_path=proto/proto bluzelle.proto database.proto audit.proto
 
 python:
   - "2.7"
