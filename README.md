@@ -12,9 +12,7 @@ pyBluzelle is a python client for developing Python applications that can connec
 
 2. Follow the instruction of deploying SwarmDB on Docker: https://github.com/bluzelle/swarmDB
 
-
-
-3. Get our client code (https://github.com/weininghu1012/pyBluzelle)
+3. Get our client code (https://github.com/bluzelle/pyBluzelle)
 
 4. Run `python3 setup.py install` under the `pyBluzelle` directory
 
@@ -41,7 +39,7 @@ True
 
 ## Testing Locally
 
-run `python3 test/test_create.py` in the `pyBluzelle` directory
+run `python3 test/test_connection` in the `pyBluzelle` directory
 
 ## List of API
 create an key value pair, return false if the key exists, return true if success.
