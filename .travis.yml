@@ -9,6 +9,8 @@ before_install:
   - echo ${PWD}
   - echo ${TRAVIS_HOME}
   - echo  ${HOME}
+  - ls
+  - cd proto
   - protoc --python_out=pyBluzelle/pyBluzelle/proto --proto_path=pyBluzelle/proto/proto bluzelle.proto database.proto audit.proto
 
 python:
