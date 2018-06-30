@@ -59,7 +59,7 @@ def create_handler(args):
 
 
 def update_handler(args):
-    return create_connection(args.host, args.port, args.uuid.update(args.key, args.value))
+    return create_connection(args.host, args.port, args.uuid).update(args.key, args.value)
 
 
 def read_handler(args):
